@@ -1,0 +1,43 @@
+## --- IDE - JetBrains Rider ---
+.idea/
+*.sln.iml
+*.user
+*.customer
+*.extensibility
+*.vssscc
+
+## --- IDE - VSCode ---
+.vscode/
+
+## --- Build Output ---
+bin/
+obj/
+
+
+## --- MonoGame Content Builder (MGCB) ---
+# Ignore the build artifacts from the Content Pipeline
+**/Content/bin/
+**/Content/obj/
+
+## --- OS Generated Files ---
+.DS_Store
+Thumbs.db
+
+## --- Dotnet / Visual Studio ---
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+
+## --- User-specific files ---
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## --- Packages ---
+*.nuget.props
+*.nuget.targets
+packages/
