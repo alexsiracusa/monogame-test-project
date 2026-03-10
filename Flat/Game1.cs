@@ -22,35 +22,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        var manager = new EntityManager();
-        var e0 = manager.AddEntity()
-            .With(new Position(new Vector2(0, 0)))
-            .Build();
         
-        var e1 = manager.AddEntity()
-            .With(new Position(new Vector2(1, 1)))
-            .Build();
-        
-        var e2 = manager.AddEntity()
-            .With(new Position(new Vector2(2, 2)))
-            .With(new Velocity(new Vector2(3, 3)))
-            .Build();
-        
-        var e3 = manager.AddEntity()
-            .With(new Position(new Vector2(4, 4)))
-            .With(new TargetFocus())
-            .Build();
-        
-        System.Console.WriteLine(manager);
-        
-        manager.RemoveEntity(1);
-        
-        System.Console.WriteLine("\n-------\n");
-        
-        System.Console.WriteLine(manager);
-        
-        
-
         base.Initialize();
     }
 

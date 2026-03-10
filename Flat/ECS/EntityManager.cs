@@ -47,8 +47,8 @@ public class EntityBuilder
 
 public class EntityManager
 {
-    private List<Archetype> archetypes = [];
-    private Dictionary<int, EntityRecord> entityRecords = new();
+    private readonly List<Archetype> archetypes = [];
+    private readonly Dictionary<int, EntityRecord> entityRecords = new();
     private int nextEntityId = 0;
     
     public int NextEntityId()
@@ -85,7 +85,7 @@ public class EntityManager
     public Archetype GetOrCreateArchetype(IEnumerable<Type> types)
     {
         var typeSet = new HashSet<Type>(types);
-        var existing = this.archetypes.FirstOrDefault(a => a.componentTypes.SetEquals(typeSet));
+        var existing = this.archetypes.FirstOrDefault(a => a.ComponentTypes.SetEquals(typeSet));
 
         if (existing != null)
         {

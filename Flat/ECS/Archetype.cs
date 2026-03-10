@@ -57,16 +57,16 @@ public class ComponentColumn<T> : IComponentColumn
 
 public class Archetype
 {
-    public HashSet<Type> componentTypes { get; }
-    private Dictionary<Type, IComponentColumn> columns = new();
-    private List<int> entityIds = [];
+    public HashSet<Type> ComponentTypes { get; }
+    private readonly Dictionary<Type, IComponentColumn> columns = new();
+    private readonly List<int> entityIds = [];
     
     private int count = 0;
     private int capacity = 1024;
 
     public Archetype(IEnumerable<Type> types)
     {
-        this.componentTypes = new HashSet<Type>(types);
+        this.ComponentTypes = new HashSet<Type>(types);
         
         foreach (var type in types)
         {
@@ -150,7 +150,7 @@ public class Archetype
 
         for (var i = 0; i < maxDisplay && i < count; i++)
         {
-            str += this.columns.Values.Aggregate($"{i,-6}", (current, column) =>
+            str += this.columns.Values.Aggregate($"{this.entityIds[i],-6}", (current, column) =>
             {
                 var dataArray = column.GetType().GetField("Data")?.GetValue(column) as Array;
                 return current + $"{dataArray?.GetValue(i),-15}";
