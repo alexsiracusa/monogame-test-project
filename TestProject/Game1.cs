@@ -39,7 +39,7 @@ public class Game1 : Game
         
         Window.AllowUserResizing = true;
 
-        this.viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 600, 600);
+        this.viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);
         this.camera = new OrthographicCamera(this.viewportAdapter);
         
         base.Initialize();
@@ -93,7 +93,7 @@ public class Game1 : Game
         // Draw background and gutters
         GraphicsDevice.Clear(Color.Black);
         GraphicsDevice.RasterizerState = new RasterizerState { ScissorTestEnable = true };
-        GraphicsDevice.Clear(Color.HotPink);
+        GraphicsDevice.Clear(Color.WhiteSmoke);
         
         // Draw sprites
         this.spriteBatch.Begin

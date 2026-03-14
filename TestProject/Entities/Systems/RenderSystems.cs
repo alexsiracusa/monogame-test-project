@@ -1,4 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -57,10 +56,15 @@ public class IntentRenderSystem : EntityDrawSystem
         {
             var castIntent = this.castIntentMapper.Get(entity);
             if (castIntent.State != CastState.Active) continue;
-            this.spriteBatch.DrawCircle(castIntent.CastPosition, 5, 10, Color.Red, 5f);
-            this.spriteBatch.DrawCircle(castIntent.TargetPosition, 5, 10, Color.Red, 5f);
-            this.spriteBatch.DrawCircle(castIntent.ControlPoint1, 5, 10, Color.Red, 5f);
-            this.spriteBatch.DrawCircle(castIntent.ControlPoint2, 5, 10, Color.Red, 5f);
+            
+            Util.DrawCubicBezier(spriteBatch, castIntent.CastPosition, castIntent.ControlPoint1, castIntent.ControlPoint2, castIntent.TargetPosition, Color.Red);
+            
+            spriteBatch.DrawCircle(castIntent.CastPosition, 5, 10, Color.Red, 5f);
+            spriteBatch.DrawCircle(castIntent.TargetPosition, 5, 10, Color.Red, 5f);
+            spriteBatch.DrawCircle(castIntent.MousePosition, 5, 10, Color.Red, 5f);
+            
+            spriteBatch.DrawCircle(castIntent.ControlPoint1, 5, 10, Color.Green, 5f);
+            spriteBatch.DrawCircle(castIntent.ControlPoint2, 5, 10, Color.Green, 5f);
         }
     }
 }

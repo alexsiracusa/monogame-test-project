@@ -92,15 +92,13 @@ internal class PlayerMouseSystem : EntityProcessingSystem
             castIntent.State = CastState.Active;
             castIntent.CastPosition = position.Value;
             castIntent.TargetPosition = mouse;
-            castIntent.ControlPoint1 = position.Value;
-            castIntent.ControlPoint2 = mouse;
+            castIntent.MousePosition = mouse;
         }
         else if (MouseExtended.GetState().IsButtonDown(MouseButton.Left))
         {
             var mouse = camera.ScreenToWorld(MouseExtended.GetState().Position.ToVector2());
             castIntent.CastPosition = position.Value;
-            castIntent.ControlPoint1 = position.Value;
-            castIntent.ControlPoint2 = mouse;
+            castIntent.MousePosition = mouse;
         }
         else if (MouseExtended.GetState().WasButtonReleased(MouseButton.Left))
         {
