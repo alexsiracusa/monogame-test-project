@@ -1,33 +1,72 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using MonoGame.Extended;
+using MonoGame.Extended.ECS;
+using MonoGame.Extended.ViewportAdapters;
+using TestProject.Entities;
 
 namespace TestProject;
 
 public class Game1 : Game
 {
-    private GraphicsDeviceManager _graphics;
-    private SpriteBatch _spriteBatch;
+    private GraphicsDeviceManager graphics;
+    private SpriteBatch spriteBatch;
+
+    private Camera<Vector2> camera;
+    private BoxingViewportAdapter viewportAdapter;
+    
+    private World world;
+    private Entity playerEntity;
 
     public Game1()
     {
-        _graphics = new GraphicsDeviceManager(this);
+        this.graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
     }
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
+        // var dm = this.GraphicsDevice.DisplayMode;
+        this.graphics.PreferredBackBufferWidth = 1000;
+        this.graphics.PreferredBackBufferHeight = 600;
+        this.graphics.ApplyChanges();
+        
+        Window.AllowUserResizing = true;
 
+        this.viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 600, 600);
+        this.camera = new OrthographicCamera(this.viewportAdapter);
+        
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
-        _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO: use this.Content to load your game content here
+        this.spriteBatch = new SpriteBatch(GraphicsDevice);
+        this.viewportAdapter.Reset();
+        
+        this.world = new WorldBuilder()
+            .AddSystem(new PlayerSystem())
+            .AddSystem(new MovementSystem())
+            .AddSystem(new VelocitySystem())
+            .AddSystem(new CameraFollowSystem(this.camera))
+            .AddSystem(new RenderSystem(GraphicsDevice, this.spriteBatch, this.camera))
+            .Build();
+        
+        playerEntity = this.world.CreateEntity();
+        playerEntity.Attach(new PlayerTag());
+        playerEntity.Attach(new Circle());
+        playerEntity.Attach(new Position(new Vector2(0, 0)));
+        playerEntity.Attach(new Velocity(new Vector2(0, 0)));
+        playerEntity.Attach(new MovementIntent(new Vector2(0, 0)));
+        playerEntity.Attach(new CameraTarget());
+        
+        var e1 = this.world.CreateEntity();
+        e1.Attach(new Position(new Vector2(200, 200)));
+        e1.Attach(new Circle());
     }
 
     protected override void Update(GameTime gameTime)
@@ -36,17 +75,19 @@ public class Game1 : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
-
+        this.world.Update(gameTime);
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-
-        // TODO: Add your drawing code here
-
+        // Draw background and gutters
+        GraphicsDevice.Clear(Color.Black);
+        GraphicsDevice.RasterizerState = new RasterizerState { ScissorTestEnable = true };
+        GraphicsDevice.Clear(Color.HotPink);
+        
+        // Draw sprites
+        this.world.Draw(gameTime);
         base.Draw(gameTime);
     }
 }

@@ -99,12 +99,6 @@ public class EntityManager
 
     public override string ToString()
     {
-        var str = "";
-        foreach (var archetype in this.archetypes)
-        {
-            str += archetype + "\n";
-        }
-
-        return str;
+        return this.archetypes.Aggregate("", (current, archetype) => current + (archetype + "\n"));
     }
 }
