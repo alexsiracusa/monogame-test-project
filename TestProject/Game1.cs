@@ -5,8 +5,10 @@ using Microsoft.Xna.Framework.Input;
 
 using MonoGame.Extended;
 using MonoGame.Extended.ECS;
+using MonoGame.Extended.Input;
 using MonoGame.Extended.ViewportAdapters;
 using TestProject.Entities;
+using TestProject.Entities.Systems;
 
 namespace TestProject;
 
@@ -15,7 +17,7 @@ public class Game1 : Game
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
 
-    private Camera<Vector2> camera;
+    private OrthographicCamera camera;
     private BoxingViewportAdapter viewportAdapter;
     
     private World world;
@@ -52,8 +54,10 @@ public class Game1 : Game
             .AddSystem(new PlayerSystem())
             .AddSystem(new MovementSystem())
             .AddSystem(new VelocitySystem())
-            .AddSystem(new CameraFollowSystem(this.camera))
-            .AddSystem(new RenderSystem(GraphicsDevice, this.spriteBatch, this.camera))
+            .AddSystem(new CameraFollowSystem(camera))
+            .AddSystem(new PlayerMouseSystem(camera))
+            .AddSystem(new RenderSystem(spriteBatch))
+            .AddSystem(new IntentRenderSystem(spriteBatch))
             .Build();
         
         playerEntity = this.world.CreateEntity();
@@ -61,7 +65,8 @@ public class Game1 : Game
         playerEntity.Attach(new Circle());
         playerEntity.Attach(new Position(new Vector2(0, 0)));
         playerEntity.Attach(new Velocity(new Vector2(0, 0)));
-        playerEntity.Attach(new MovementIntent(new Vector2(0, 0)));
+        playerEntity.Attach(new MovementIntent());
+        playerEntity.Attach(new CastIntent());
         playerEntity.Attach(new CameraTarget());
         
         var e1 = this.world.CreateEntity();
@@ -75,6 +80,10 @@ public class Game1 : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        // Update mouse state
+        MouseExtended.Update();
+        KeyboardExtended.Update();
+
         this.world.Update(gameTime);
         base.Update(gameTime);
     }
@@ -87,7 +96,14 @@ public class Game1 : Game
         GraphicsDevice.Clear(Color.HotPink);
         
         // Draw sprites
+        this.spriteBatch.Begin
+        (
+            transformMatrix: this.camera.GetViewMatrix(),
+            samplerState: SamplerState.PointClamp
+        );
         this.world.Draw(gameTime);
+        this.spriteBatch.End();
+        
         base.Draw(gameTime);
     }
 }
