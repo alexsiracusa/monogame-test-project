@@ -7,6 +7,10 @@ using MonoGame.Extended;
 using MonoGame.Extended.ECS;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.ViewportAdapters;
+// using MonoGame.Extended.Graphics;
+// using MonoGame.Extended.Content;
+// using MonoGame.Extended.Serialization.Json;
+
 using TestProject.Entities;
 using TestProject.Entities.Systems;
 
@@ -49,6 +53,11 @@ public class Game1 : Game
     {
         this.spriteBatch = new SpriteBatch(GraphicsDevice);
         this.viewportAdapter.Reset();
+        
+        // load player spritesheet
+        // var atlas = Content.Load<Texture2DAtlas>("textures/player");
+        // var playerSpriteSheet = new SpriteSheet("SpriteSheet/adventurer", atlas);
+        // var playerSpriteSheet = Content.Load<SpriteSheet>("spritesheets/player", new JsonContentLoader());
         
         this.world = new WorldBuilder()
             .AddSystem(new PlayerSystem())

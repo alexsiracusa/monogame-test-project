@@ -6,14 +6,17 @@
         <PublishReadyToRun>false</PublishReadyToRun>
         <TieredCompilation>false</TieredCompilation>
     </PropertyGroup>
+    
     <PropertyGroup>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Icon.ico</ApplicationIcon>
     </PropertyGroup>
+    
     <ItemGroup>
         <None Remove="Icon.ico" />
         <None Remove="Icon.bmp" />
     </ItemGroup>
+    
     <ItemGroup>
         <EmbeddedResource Include="Icon.ico">
             <LogicalName>Icon.ico</LogicalName>
@@ -22,9 +25,27 @@
             <LogicalName>Icon.bmp</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
+    
     <ItemGroup>
-        <PackageReference Include="MonoGame.Extended" Version="5.3.1" />
+        <PackageReference Include="MonoGame.Extended" Version="5.4.0" />
+        <PackageReference Include="MonoGame.Extended.Content.Pipeline" Version="5.4.0" />
         <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.*" />
         <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*" />
     </ItemGroup>
+    
+   	<Target Name="ConfigureMGCBReferences" BeforeTargets="RunContentBuilder">
+    <ItemGroup>
+        <MGCBParameter Include="Reference" 
+            Value="$(NuGetPackagesRoot)monogame.extended/5.4.0/lib/net8.0/MonoGame.Extended.dll" />
+        
+        <MGCBParameter Include="Reference" 
+            Value="$(NuGetPackagesRoot)monogame.extended.graphics/5.4.0/lib/net8.0/MonoGame.Extended.Graphics.dll" />
+        
+        <MGCBParameter Include="Reference" 
+            Value="$(NuGetPackagesRoot)monogame.extended.content.pipeline/5.4.0/lib/net8.0/MonoGame.Extended.Content.Pipeline.dll" />
+
+        <MGCBParameter Include="Reference" 
+            Value="$(NuGetPackagesRoot)newtonsoft.json/13.0.3/lib/net6.0/Newtonsoft.Json.dll" />
+    </ItemGroup>
+	</Target>
 </Project>

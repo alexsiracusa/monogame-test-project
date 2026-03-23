@@ -23,7 +23,7 @@ public static class Util
     }
 
     public static void DrawCubicBezier(SpriteBatch spriteBatch, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, Color color,
-        int segments = 20, float minT = 0, float maxT = 1f)
+        float thickness = 1f, int segments = 20, float minT = 0, float maxT = 1f)
     {
         var previousPoint = p0;
 
@@ -33,7 +33,7 @@ public static class Util
             var currentPoint = GetCubicBezierPoint(p0, p1, p2, p3, t);
 
             // Assuming you have a DrawLine helper method
-            spriteBatch.DrawLine(previousPoint, currentPoint, color, 2f);
+            spriteBatch.DrawLine(previousPoint, currentPoint, color, thickness);
 
             previousPoint = currentPoint;
         }
