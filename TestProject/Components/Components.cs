@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework;
 
-namespace TestProject.Entities;
+namespace TestProject.Components;
 
 public class Position(Vector2 value)
 {

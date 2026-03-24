@@ -6,7 +6,9 @@ using MonoGame.Extended.ECS;
 using MonoGame.Extended.ECS.Systems;
 using MonoGame.Extended.Input;
 
-namespace TestProject.Entities.Systems;
+using TestProject.Components;
+
+namespace TestProject.Systems;
 
 internal class PlayerSystem : EntityProcessingSystem
 {

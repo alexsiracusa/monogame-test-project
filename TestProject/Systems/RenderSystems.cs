@@ -5,7 +5,9 @@ using MonoGame.Extended;
 using MonoGame.Extended.ECS;
 using MonoGame.Extended.ECS.Systems;
 
-namespace TestProject.Entities.Systems;
+using TestProject.Components;
+
+namespace TestProject.Systems;
 
 public class RenderSystem : EntityDrawSystem
 {

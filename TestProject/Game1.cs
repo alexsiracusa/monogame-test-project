@@ -11,8 +11,8 @@ using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Content;
 using MonoGame.Extended.Serialization.Json;
 
-using TestProject.Entities;
-using TestProject.Entities.Systems;
+using TestProject.Systems;
+using TestProject.Components;
 
 namespace TestProject;
 
