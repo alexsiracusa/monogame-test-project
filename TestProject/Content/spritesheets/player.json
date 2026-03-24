@@ -1,16 +1,102 @@
 {
 	"textures": [
 		{
-			"filename": "player-spritesheet-texture.png",
+			"filename": "../textures/player.png",
 			"format": "RGBA8888",
+			"size": {"w":128,"h":128},
 			"frames": {
-				"walkDown_0": { "frame": { "x": 0, "y": 0, "w": 32, "h": 32 } },
-				"walkDown_1": { "frame": { "x": 32, "y": 0, "w": 32, "h": 32 } }
+				"PlayerDown":{
+					"frame": {"x":0,"y":0,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerRight":{
+					"frame": {"x":0,"y":32,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerUp":{
+					"frame": {"x":0,"y":64,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerLeft":{
+					"frame": {"x":0,"y":96,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+
+				"PlayerWalkDown/0001":{
+					"frame": {"x":0,"y":0,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkDown/0002":{
+					"frame": {"x":32,"y":0,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkDown/0003":{
+					"frame": {"x":64,"y":0,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkDown/0004":{
+					"frame": {"x":96,"y":0,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				
+				"PlayerWalkRight/0001":{
+					"frame": {"x":0,"y":32,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkRight/0002":{
+					"frame": {"x":32,"y":32,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkRight/0003":{
+					"frame": {"x":64,"y":32,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkRight/0004":{
+					"frame": {"x":96,"y":32,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				
+				"PlayerWalkUp/0001":{
+					"frame": {"x":0,"y":64,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkUp/0002":{
+					"frame": {"x":32,"y":64,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkUp/0003":{
+					"frame": {"x":64,"y":64,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkUp/0004":{
+					"frame": {"x":96,"y":64,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				
+				"PlayerWalkLeft/0001":{
+					"frame": {"x":0,"y":96,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkLeft/0002":{
+					"frame": {"x":32,"y":96,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkLeft/0003":{
+					"frame": {"x":64,"y":96,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				},
+				"PlayerWalkLeft/0004":{
+					"frame": {"x":96,"y":96,"w":32,"h":32},
+					"pivot": {"x":0.5,"y":1}
+				}
 			}
 		}
 	],
+
 	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
 		"dataformat": "monogame-extended",
-		"version": "1.2"
+		"version": "1.2",
+		"smartupdate": "$TexturePacker:SmartUpdate:c5f80b6bf3833c6c957e918cbed3ad6a:02a7455069a56b3430f2c70c82ad213c:acb205fb2ccc4568b3de9eac4c6445e2$"
 	}
 }

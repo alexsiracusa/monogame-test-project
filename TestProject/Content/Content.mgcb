@@ -10,17 +10,17 @@
 
 #-------------------------------- References --------------------------------#
 
-#/reference:/Users/alex/.nuget/packages/monogame.extended/5.4.0/lib/net8.0/MonoGame.Extended.dll
-#/reference:/Users/alex/.nuget/packages/monogame.extended.content.pipeline/5.4.0/lib/net8.0/MonoGame.Extended.Content.Pipeline.dll
-#/reference:/Users/alex/.nuget/packages/newtonsoft.json/13.0.3/lib/net6.0/Newtonsoft.Json.dll
-#/reference:/Users/alex/.nuget/packages/monogame.framework.desktopgl/3.8.4.1/lib/net8.0/MonoGame.Framework.dll
+/reference:/Users/alex/.nuget/packages/monogame.extended/5.4.0/lib/net8.0/MonoGame.Extended.dll
+/reference:/Users/alex/.nuget/packages/monogame.extended.content.pipeline/5.4.0/lib/net8.0/MonoGame.Extended.Content.Pipeline.dll
+/reference:/Users/alex/.nuget/packages/newtonsoft.json/13.0.3/lib/net6.0/Newtonsoft.Json.dll
+/reference:/Users/alex/.nuget/packages/monogame.framework.desktopgl/3.8.4.1/lib/net8.0/MonoGame.Framework.dll
 
 
 #---------------------------------- Content ---------------------------------#
 
 #begin spritesheets/player.json
-/importer:
-/processor:
+/importer:TexturePackerJsonImporter
+/processor:TexturePackerProcessor
 /build:spritesheets/player.json
 
 #begin textures/player.png
