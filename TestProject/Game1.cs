@@ -3,11 +3,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using MonoGame.Extended;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.ViewportAdapters;
 using MonoGame.Extended.Screens.Transitions;
 
-
+using TestProject.Factories;
 using TestProject.Screens;
 
 namespace TestProject;
@@ -17,6 +19,11 @@ public class Game1 : Game
     private GraphicsDeviceManager graphics;
     private SpriteBatch spriteBatch;
     private ScreenManager screenManager;
+    
+    private OrthographicCamera camera;
+    private BoxingViewportAdapter viewportAdapter;
+    
+    private WorldFactory worldFactory;
 
     public Game1()
     {
@@ -43,7 +50,16 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         this.spriteBatch = new SpriteBatch(GraphicsDevice);
-        this.screenManager.ShowScreen(new GameplayScreen(this, spriteBatch));
+        
+        // define aspect ratio and camera
+        this.viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);
+        this.camera = new OrthographicCamera(this.viewportAdapter);
+        
+        // create initial screen and world
+        this.worldFactory = new WorldFactory(Content, spriteBatch, camera);
+        this.screenManager.ShowScreen(new GameplayScreen(this, worldFactory.TestWorld(), spriteBatch, camera));
+        
+        this.viewportAdapter.Reset();
     }
 
     protected override void Update(GameTime gameTime)
@@ -52,7 +68,7 @@ public class Game1 : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // Update mouse state
+        // Update MonoGame Extended input handlers
         MouseExtended.Update();
         KeyboardExtended.Update();
         
