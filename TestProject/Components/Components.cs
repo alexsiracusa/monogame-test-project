@@ -1,4 +1,7 @@
 using Microsoft.Xna.Framework;
+using MonoGame.Extended.Graphics;
+
+using TestProject.Core;
 
 namespace TestProject.Components;
 
@@ -38,6 +41,20 @@ public class CastIntent(Vector2 castPosition, Vector2 targetPosition, Vector2 mo
     public Vector2 ControlPoint2 => TargetPosition - 4 * (MousePosition - TargetPosition);
 
     public CastIntent() : this(Vector2.Zero, Vector2.Zero, Vector2.Zero) { }
+}
+
+public enum ActionState
+{
+    Idle,
+    Walk,
+    Attack,
+}
+
+public class AnimationComponent(AnimatedSprite sprite)
+{
+    public AnimatedSprite Sprite = sprite;
+    public ActionState Action = ActionState.Idle;
+    public Direction Direction = Direction.Down;
 }
 
 public class Circle();

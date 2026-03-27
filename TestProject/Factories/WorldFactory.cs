@@ -17,20 +17,18 @@ class WorldFactory
     private readonly ContentManager content;
     private readonly SpriteBatch spriteBatch;
     private readonly OrthographicCamera camera;
+    private readonly AnimationFactory animationFactory;
     
     public WorldFactory(ContentManager content, SpriteBatch spriteBatch, OrthographicCamera camera)
     {
         this.content = content;
         this.spriteBatch = spriteBatch;
         this.camera = camera;
+        this.animationFactory = new AnimationFactory(content);
     }
 
-    public void SpawnPlayer(World world, Vector2 position = default)
+    public Entity SpawnPlayer(World world, Vector2 position = default)
     {
-        // load player spritesheet
-        var atlas = content.Load<Texture2DAtlas>("spritesheets/player");
-        var playerSpriteSheet = new SpriteSheet("textures/player", atlas);
-        
         var player = world.CreateEntity();
         player.Attach(new PlayerTag());
         player.Attach(new Circle());
@@ -39,6 +37,9 @@ class WorldFactory
         player.Attach(new MovementIntent());
         player.Attach(new CastIntent());
         player.Attach(new CameraTarget());
+        player.Attach(animationFactory.CreatePlayer());
+
+        return player;
     }
 
     public World TestWorld()
@@ -49,14 +50,17 @@ class WorldFactory
             .AddSystem(new VelocitySystem())
             .AddSystem(new CameraFollowSystem(camera))
             .AddSystem(new PlayerMouseSystem(camera))
+            .AddSystem(new AnimationStateSystem())
+            .AddSystem(new AnimationPlaySystem())
             .AddSystem(new RenderSystem(spriteBatch))
+            .AddSystem(new SpriteRenderSystem(spriteBatch))
             .AddSystem(new IntentRenderSystem(spriteBatch))
             .Build();
         
         SpawnPlayer(world);
         
         var e1 = world.CreateEntity();
-        e1.Attach(new Position(new Vector2(200, 200)));
+        e1.Attach(new Position(new Vector2(50, 50)));
         e1.Attach(new Circle());
 
         return world;

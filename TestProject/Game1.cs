@@ -54,6 +54,7 @@ public class Game1 : Game
         // define aspect ratio and camera
         this.viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);
         this.camera = new OrthographicCamera(this.viewportAdapter);
+        this.camera.Zoom = 4.0f;
         
         // create initial screen and world
         this.worldFactory = new WorldFactory(Content, spriteBatch, camera);

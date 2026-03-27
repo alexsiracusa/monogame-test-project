@@ -53,7 +53,7 @@ internal class PlayerSystem : EntityProcessingSystem
             dir.Normalize();
         }
 
-        movementIntent.Direction = 250 * dir;
+        movementIntent.Direction = 100 * dir;
     }
 }
 

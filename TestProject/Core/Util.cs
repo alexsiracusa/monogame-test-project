@@ -2,7 +2,16 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 
-namespace TestProject;
+namespace TestProject.Core;
+
+public enum Direction
+{
+    Up,
+    Down,
+    Left,
+    Right,
+    None
+}
 
 public static class Util
 {
