@@ -95,16 +95,23 @@ public class IntentRenderSystem : EntityDrawSystem
             var castIntent = this.castIntentMapper.Get(entity);
             if (castIntent.State != CastState.Active) continue;
 
-            const float thickness = 1f;
-            Util.DrawCubicBezier(spriteBatch, castIntent.CastPosition, castIntent.ControlPoint1, castIntent.ControlPoint2, castIntent.TargetPosition, Color.Red, thickness);
+            const int thickness = 1;
+            
+            Util.DrawBresenhamCubicBezier(
+                spriteBatch, castIntent.CastPosition, castIntent.ControlPoint1, 
+                castIntent.ControlPoint2, castIntent.TargetPosition, Color.Red, thickness
+            );
             
             var launchDirection = castIntent.MousePosition - castIntent.TargetPosition;
-            var endAngle = (float) Math.Atan2(launchDirection.Y, launchDirection.X);
-            spriteBatch.DrawLine(castIntent.TargetPosition, 2500f, endAngle, Color.Red, thickness);
+            var endPosition = castIntent.TargetPosition + launchDirection.NormalizedCopy() * 1000;
+            Util.DrawBresenhamLine(spriteBatch, castIntent.TargetPosition, endPosition, Color.Red, thickness);
             
-            spriteBatch.DrawCircle(castIntent.CastPosition, 1.5f, 10, Color.Red, 1.5f);
-            spriteBatch.DrawCircle(castIntent.TargetPosition, 1.5f, 10, Color.Red, 1.5f);
-            spriteBatch.DrawCircle(castIntent.MousePosition, 1.5f, 10, Color.Red, 1.5f);
+            
+            // spriteBatch.DrawLine(castIntent.TargetPosition, 2500f, endAngle, Color.Red, thickness);
+            
+            // spriteBatch.DrawCircle(castIntent.CastPosition, 1.5f, 10, Color.Red, 1.5f);
+            // spriteBatch.DrawCircle(castIntent.TargetPosition, 1.5f, 10, Color.Red, 1.5f);
+            // spriteBatch.DrawCircle(castIntent.MousePosition, 1.5f, 10, Color.Red, 1.5f);
             
             // spriteBatch.DrawCircle(castIntent.ControlPoint1, 5, 10, Color.Green, 5f);
             // spriteBatch.DrawCircle(castIntent.ControlPoint2, 5, 10, Color.Green, 5f);

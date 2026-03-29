@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -31,8 +32,16 @@ public static class Util
         return p;
     }
 
-    public static void DrawCubicBezier(SpriteBatch spriteBatch, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, Color color,
-        float thickness = 1f, int segments = 20, float minT = 0, float maxT = 1f)
+    public static void DrawBresenhamCubicBezier(
+        SpriteBatch spriteBatch, 
+        Vector2 p0, Vector2 p1, 
+        Vector2 p2, Vector2 p3, 
+        Color color,
+        int thickness = 1, 
+        int segments = 25, 
+        float minT = 0, 
+        float maxT = 1f
+        )
     {
         var previousPoint = p0;
 
@@ -41,10 +50,78 @@ public static class Util
             var t = (i / (float) segments) * (maxT - minT) + minT;
             var currentPoint = GetCubicBezierPoint(p0, p1, p2, p3, t);
 
-            // Assuming you have a DrawLine helper method
-            spriteBatch.DrawLine(previousPoint, currentPoint, color, thickness);
+            DrawBresenhamLine(spriteBatch, previousPoint, currentPoint, color, thickness);
 
             previousPoint = currentPoint;
         }
+    }
+    
+    private static Texture2D pixel;
+    
+    private static Texture2D GetPixel(SpriteBatch spriteBatch)
+    {
+        if (pixel == null)
+        {
+            pixel = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+            pixel.SetData(new[] { Color.White });
+        }
+        return pixel;
+    }
+    
+    // Bresenham line function (float -> int internally)
+    public static void DrawBresenhamLine(
+        SpriteBatch spriteBatch,
+        Vector2 start, 
+        Vector2 end,
+        Color color, 
+        int thickness = 1
+        )
+    {
+        int x0 = (int) MathF.Round(start.X);
+        int y0 = (int) MathF.Round(start.Y);
+        int x1 = (int) MathF.Round(end.X);
+        int y1 = (int) MathF.Round(end.Y);
+    
+        int dx = Math.Abs(x1 - x0);
+        int dy = Math.Abs(y1 - y0);
+    
+        int sx = x0 < x1 ? 1 : -1;
+        int sy = y0 < y1 ? 1 : -1;
+    
+        int err = dx - dy;
+        var pixel = GetPixel(spriteBatch);
+    
+        while (true)
+        {
+            DrawThickPixel(spriteBatch, pixel, x0, y0, thickness, color);
+    
+            if (x0 == x1 && y0 == y1)
+            {
+                break;
+            }
+    
+            int e2 = 2 * err;
+            if (e2 > -dy)
+            {
+                err -= dy; x0 += sx;
+            }
+    
+            if (e2 < dx)
+            {
+                err += dx; y0 += sy;
+            }
+        }
+    }
+    
+    private static void DrawThickPixel(
+        SpriteBatch spriteBatch, 
+        Texture2D pixel, 
+        int x, int y, 
+        int thickness, 
+        Color color
+        ) 
+    {
+        int half = thickness / 2;
+        spriteBatch.Draw(pixel, new Rectangle(x - half, y - half, thickness, thickness), color);
     }
 }
