@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 using MonoGame.Extended;
 using MonoGame.Extended.ECS;
-using MonoGame.Extended.Graphics;
 
 using TestProject.Systems;
 using TestProject.Components;
@@ -36,8 +35,11 @@ class WorldFactory
         player.Attach(new Velocity(Vector2.Zero));
         player.Attach(new MovementIntent());
         player.Attach(new CastIntent());
-        player.Attach(new CameraTarget());
-        player.Attach(animationFactory.CreatePlayer());
+        // player.Attach(new CameraTarget());
+        
+        var sprite = animationFactory.CreatePlayer();
+        player.Attach(sprite);
+        player.Attach(new SpriteComponent(sprite.Sprite.TextureRegion));
 
         return player;
     }

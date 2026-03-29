@@ -45,10 +45,10 @@ public class SpriteRenderSystem : EntityDrawSystem
     private readonly SpriteBatch spriteBatch;
     
     private ComponentMapper<Position> positionMapper;
-    private ComponentMapper<AnimationComponent> spriteMapper;
+    private ComponentMapper<SpriteComponent> spriteMapper;
 
     public SpriteRenderSystem(SpriteBatch spriteBatch)
-        : base(Aspect.All(typeof(Position), typeof(AnimationComponent)))
+        : base(Aspect.All(typeof(Position), typeof(SpriteComponent)))
     {
         this.spriteBatch = spriteBatch;
     }
@@ -56,7 +56,7 @@ public class SpriteRenderSystem : EntityDrawSystem
     public override void Initialize(IComponentMapperService mapperService)
     {
         this.positionMapper = mapperService.GetMapper<Position>();
-        this.spriteMapper = mapperService.GetMapper<AnimationComponent>();
+        this.spriteMapper = mapperService.GetMapper<SpriteComponent>();
     }
 
     public override void Draw(GameTime gameTime)

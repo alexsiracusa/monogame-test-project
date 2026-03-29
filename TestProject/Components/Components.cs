@@ -50,6 +50,11 @@ public enum ActionState
     Attack,
 }
 
+public class SpriteComponent(Texture2DRegion textureRegion)
+{
+    public Sprite Sprite = new Sprite(textureRegion);
+}
+
 public class AnimationComponent(AnimatedSprite sprite)
 {
     public AnimatedSprite Sprite = sprite;

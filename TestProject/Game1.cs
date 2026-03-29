@@ -55,6 +55,7 @@ public class Game1 : Game
         this.viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice, 1920, 1080);
         this.camera = new OrthographicCamera(this.viewportAdapter);
         this.camera.Zoom = 4.0f;
+        this.camera.LookAt(Vector2.Zero);
         
         // create initial screen and world
         this.worldFactory = new WorldFactory(Content, spriteBatch, camera);
