@@ -39,7 +39,7 @@ public class GameplayScreen : GameScreen
         // Draw background and gutters
         GraphicsDevice.Clear(Color.Black);
         GraphicsDevice.RasterizerState = new RasterizerState { ScissorTestEnable = true };
-        GraphicsDevice.Clear(Color.WhiteSmoke);
+        GraphicsDevice.Clear(Color.DarkGray);
         
         // Draw sprites
         this.spriteBatch.Begin

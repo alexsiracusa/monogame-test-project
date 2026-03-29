@@ -95,16 +95,27 @@ public class IntentRenderSystem : EntityDrawSystem
             var castIntent = this.castIntentMapper.Get(entity);
             if (castIntent.State != CastState.Active) continue;
 
+            var color = Color.LightGray;
             const int thickness = 1;
+
+            if (castIntent.IsStraight())
+            {
+                Util.DrawBresenhamLine(
+                    spriteBatch, castIntent.CastPosition, castIntent.TargetPosition, 
+                    color, thickness
+                );
+            }
+            else
+            {
+                Util.DrawBresenhamCubicBezier(
+                    spriteBatch, castIntent.CastPosition, castIntent.ControlPoint1, 
+                    castIntent.ControlPoint2, castIntent.TargetPosition, color, thickness
+                );
             
-            Util.DrawBresenhamCubicBezier(
-                spriteBatch, castIntent.CastPosition, castIntent.ControlPoint1, 
-                castIntent.ControlPoint2, castIntent.TargetPosition, Color.Red, thickness
-            );
-            
-            var launchDirection = castIntent.MousePosition - castIntent.TargetPosition;
-            var endPosition = castIntent.TargetPosition + launchDirection.NormalizedCopy() * 1000;
-            Util.DrawBresenhamLine(spriteBatch, castIntent.TargetPosition, endPosition, Color.Red, thickness);
+                var launchDirection = castIntent.MousePosition - castIntent.TargetPosition;
+                var endPosition = castIntent.TargetPosition + launchDirection.NormalizedCopy() * 1000;
+                Util.DrawBresenhamLine(spriteBatch, castIntent.TargetPosition, endPosition, color, thickness);
+            }
             
             
             // spriteBatch.DrawLine(castIntent.TargetPosition, 2500f, endAngle, Color.Red, thickness);

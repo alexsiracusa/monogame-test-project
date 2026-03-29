@@ -14,6 +14,23 @@ public enum Direction
     None
 }
 
+public static class Vector2Extensions
+{
+    public static Vector2 ClampLength(this Vector2 v, float min, float max)
+    {
+        if (v.Length() > max)
+        {
+            return Vector2.Normalize(v) * max;
+        }
+
+        if (v.Length() < min)
+        {
+            return Vector2.Normalize(v) * min;
+        }
+        return v;
+    }
+}
+
 public static class Util
 {
     public static Vector2 GetCubicBezierPoint(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t)
