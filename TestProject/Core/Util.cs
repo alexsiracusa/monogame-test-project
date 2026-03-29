@@ -48,6 +48,14 @@ public static class Util
 
         return p;
     }
+    
+    public static Vector2 GetCubicBezierVelocity(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t)
+    {
+        var it = 1.0f - t;
+        return 3 * it * it * (p1 - p0) +
+               6 * it * t * (p2 - p1) +
+               3 * t * t * (p3 - p2);
+    }
 
     public static void DrawBresenhamCubicBezier(
         SpriteBatch spriteBatch, 

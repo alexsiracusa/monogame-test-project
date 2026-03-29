@@ -10,11 +10,11 @@ using TestProject.Components;
 
 namespace TestProject.Systems;
 
-internal class PlayerSystem : EntityProcessingSystem
+internal class PlayerKeyboardSystem : EntityProcessingSystem
 {
     private ComponentMapper<MovementIntent> movementIntentMapper;
 
-    public PlayerSystem() : base(Aspect.All(typeof(PlayerTag), typeof(MovementIntent))) {}
+    public PlayerKeyboardSystem() : base(Aspect.All(typeof(PlayerTag), typeof(MovementIntent))) {}
 
     public override void Initialize(IComponentMapperService mapperService)
     {
