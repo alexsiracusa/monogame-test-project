@@ -62,6 +62,7 @@ internal class PlayerMouseSystem : EntityProcessingSystem
 {
     private ComponentMapper<Position> positionMapper;
     private ComponentMapper<CastIntent> castIntentMapper;
+    private ComponentMapper<SpriteComponent> spriteMapper;
     
     private readonly OrthographicCamera camera;
 
@@ -75,6 +76,7 @@ internal class PlayerMouseSystem : EntityProcessingSystem
     {
         this.positionMapper = mapperService.GetMapper<Position>();
         this.castIntentMapper = mapperService.GetMapper<CastIntent>();
+        this.spriteMapper = mapperService.GetMapper<SpriteComponent>();
     }
 
     public override void Process(GameTime gameTime, int entityId)
@@ -85,21 +87,28 @@ internal class PlayerMouseSystem : EntityProcessingSystem
     private void HandleCast(int entityId)
     {
         var castIntent = this.castIntentMapper.Get(entityId);
-        var position = this.positionMapper.Get(entityId);
+        var position = this.positionMapper.Get(entityId).Value;
+        
+        // center cast position on sprite if available (raw position often at "feet" of the sprite)
+        if (spriteMapper.TryGet(entityId, out var sprite))
+        {
+            var size = sprite.Sprite.TextureRegion;
+            position += sprite.GetCenterOffset();
+        }
         
         if (MouseExtended.GetState().WasButtonPressed(MouseButton.Left))
         {
             var mouse = camera.ScreenToWorld(MouseExtended.GetState().Position.ToVector2());
             
             castIntent.State = CastState.Active;
-            castIntent.CastPosition = position.Value;
+            castIntent.CastPosition = position;
             castIntent.TargetPosition = mouse;
             castIntent.MousePosition = mouse;
         }
         else if (MouseExtended.GetState().IsButtonDown(MouseButton.Left))
         {
             var mouse = camera.ScreenToWorld(MouseExtended.GetState().Position.ToVector2());
-            castIntent.CastPosition = position.Value;
+            castIntent.CastPosition = position;
             castIntent.MousePosition = mouse;
         }
         else if (MouseExtended.GetState().WasButtonReleased(MouseButton.Left))

@@ -38,11 +38,19 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // var dm = this.GraphicsDevice.DisplayMode;
-        this.graphics.PreferredBackBufferWidth = 1000;
-        this.graphics.PreferredBackBufferHeight = 600;
-        this.graphics.ApplyChanges();
+        graphics.PreferredBackBufferWidth = 1440;
+        graphics.PreferredBackBufferHeight = 810;
+        
+        // fixed fps
+        IsFixedTimeStep = true;
+        TargetElapsedTime = TimeSpan.FromSeconds(1d / 60d);
+        
+        // uncap fps
+        // IsFixedTimeStep = false;
+        // graphics.SynchronizeWithVerticalRetrace = false;
         
         Window.AllowUserResizing = true;
+        graphics.ApplyChanges();
         
         base.Initialize();
     }
@@ -60,6 +68,7 @@ public class Game1 : Game
         // create initial screen and world
         this.worldFactory = new WorldFactory(Content, spriteBatch, camera);
         this.screenManager.ShowScreen(new GameplayScreen(this, worldFactory.TestWorld(), spriteBatch, camera));
+        this.screenManager.ShowScreen(new DiagnosticsScreen(this, spriteBatch));
         
         this.viewportAdapter.Reset();
     }

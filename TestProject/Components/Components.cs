@@ -53,6 +53,12 @@ public enum ActionState
 public class SpriteComponent(Texture2DRegion textureRegion)
 {
     public Sprite Sprite = new Sprite(textureRegion);
+    
+    public Vector2 GetCenterOffset()
+    {
+        var center = new Vector2(Sprite.TextureRegion.Width / 2f, Sprite.TextureRegion.Height / 2f);
+        return center - Sprite.Origin;
+    }
 }
 
 public class AnimationComponent(AnimatedSprite sprite)

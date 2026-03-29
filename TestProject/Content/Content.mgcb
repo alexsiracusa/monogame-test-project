@@ -15,8 +15,12 @@
 /reference:/Users/alex/.nuget/packages/newtonsoft.json/13.0.3/lib/net6.0/Newtonsoft.Json.dll
 /reference:/Users/alex/.nuget/packages/monogame.framework.desktopgl/3.8.4.1/lib/net8.0/MonoGame.Framework.dll
 
-
 #---------------------------------- Content ---------------------------------#
+
+#begin fonts/CourierNew.spriteFont
+/processor:FontDescriptionProcessor
+/importer:FontDescriptionImporter
+/build:fonts/CourierNew.spriteFont
 
 #begin spritesheets/player.json
 /importer:TexturePackerJsonImporter

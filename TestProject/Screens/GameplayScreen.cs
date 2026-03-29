@@ -4,12 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
 using MonoGame.Extended.ECS;
 using MonoGame.Extended.Screens;
-using MonoGame.Extended.ViewportAdapters;
-using MonoGame.Extended.Graphics;
 
-using TestProject.Systems;
-using TestProject.Components;
-using TestProject.Factories;
 
 namespace TestProject.Screens;
 
@@ -24,6 +19,9 @@ public class GameplayScreen : GameScreen
         this.world = world;
         this.spriteBatch = spriteBatch;
         this.camera = camera;
+        
+        DrawWhenInactive = true; 
+        UpdateWhenInactive = true;
     }
 
     public override void LoadContent()
