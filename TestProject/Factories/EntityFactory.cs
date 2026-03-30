@@ -33,12 +33,22 @@ public class EntityFactory
         player.Attach(new Velocity(Vector2.Zero));
         player.Attach(new MovementIntent());
         player.Attach(new CastIntent());
-        // player.Attach(new CameraTarget());
+        player.Attach(new CameraTarget());
         
         var sprite = animationFactory.CreatePlayer();
         player.Attach(sprite);
         player.Attach(new SpriteComponent(sprite.Sprite.TextureRegion));
 
         return player;
+    }
+
+    public Entity SpawnBeam(CastIntent castIntent)
+    {
+        var beam = world.CreateEntity();
+        beam.Attach(new Position(castIntent.CastPosition));
+        beam.Attach(new Velocity(Vector2.Zero));
+        beam.Attach(castIntent.PathFollow());
+
+        return beam;
     }
 }

@@ -58,7 +58,11 @@ public class SceneFactory
             .AddSystem(new MovementSystem())
             .AddSystem(new VelocitySystem())
             .AddSystem(new CameraFollowSystem(camera))
+            
+            // Attack
             .AddSystem(new PlayerMouseSystem(camera))
+            .AddSystem(new CastingSystem(entityFactory))
+            .AddSystem(new PathFollowSystem())
             
             // Animations
             .AddSystem(new AnimationStateSystem())
@@ -68,6 +72,7 @@ public class SceneFactory
             .AddSystem(new RenderSystem(spriteBatch))
             .AddSystem(new SpriteRenderSystem(spriteBatch))
             .AddSystem(new IntentRenderSystem(spriteBatch))
+            .AddSystem(new PathRenderSystem(spriteBatch))
             .Build();
         
         var e1 = world.CreateEntity();

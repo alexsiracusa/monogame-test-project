@@ -100,7 +100,7 @@ internal class PlayerMouseSystem : EntityProcessingSystem
         {
             var mouse = camera.ScreenToWorld(MouseExtended.GetState().Position.ToVector2());
             
-            castIntent.State = CastState.Active;
+            castIntent.State = CastState.Aiming;
             castIntent.CastPosition = position;
             castIntent.TargetPosition = mouse;
             castIntent.MousePosition = mouse;
@@ -113,7 +113,7 @@ internal class PlayerMouseSystem : EntityProcessingSystem
         }
         else if (MouseExtended.GetState().WasButtonReleased(MouseButton.Left))
         {
-            castIntent.State = CastState.InActive;
+            castIntent.State = CastState.Fired;
         }
     }
 }

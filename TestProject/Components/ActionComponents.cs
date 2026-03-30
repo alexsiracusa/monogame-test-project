@@ -12,14 +12,14 @@ public class MovementIntent(Vector2 direction)
 
 public enum CastState
 {
-    InActive,
-    Active,
-    Cast,
+    Inactive,
+    Aiming,
+    Fired,
 }
 
 public class CastIntent(Vector2 castPosition, Vector2 targetPosition, Vector2 mousePosition)
 {
-    public CastState State = CastState.InActive;
+    public CastState State = CastState.Inactive;
     public Vector2 CastPosition = castPosition;
     public Vector2 TargetPosition = targetPosition;
     public Vector2 MousePosition = mousePosition;
@@ -31,4 +31,13 @@ public class CastIntent(Vector2 castPosition, Vector2 targetPosition, Vector2 mo
     public CastIntent() : this(Vector2.Zero, Vector2.Zero, Vector2.Zero) { }
 
     public bool IsStraight() => (TargetPosition - MousePosition).Length() < 12;
+
+    public BezierPathFollowComponent PathFollow()
+    {
+        return new BezierPathFollowComponent(
+            CastPosition, ControlPoint1, 
+            ControlPoint2, TargetPosition, 
+            Constants.BeamProjectileSpeed
+        );
+    }
 }

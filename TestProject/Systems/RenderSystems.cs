@@ -93,7 +93,7 @@ public class IntentRenderSystem : EntityDrawSystem
         foreach (var entity in ActiveEntities)
         {
             var castIntent = this.castIntentMapper.Get(entity);
-            if (castIntent.State != CastState.Active) continue;
+            if (castIntent.State != CastState.Aiming) continue;
 
             var color = Color.LightGray;
             const int thickness = 1;
@@ -113,7 +113,7 @@ public class IntentRenderSystem : EntityDrawSystem
                 );
             
                 var launchDirection = castIntent.MousePosition - castIntent.TargetPosition;
-                var endPosition = castIntent.TargetPosition + launchDirection.NormalizedCopy() * 1000;
+                var endPosition = castIntent.TargetPosition + launchDirection.NormalizedCopy() * Constants.BeamMaxTravelDistance;
                 Util.DrawBresenhamLine(spriteBatch, castIntent.TargetPosition, endPosition, color, thickness);
             }
             
@@ -128,4 +128,54 @@ public class IntentRenderSystem : EntityDrawSystem
             // spriteBatch.DrawCircle(castIntent.ControlPoint2, 5, 10, Color.Green, 5f);
         }
     }
+}
+
+
+internal class PathRenderSystem : EntityDrawSystem
+{
+    private readonly SpriteBatch spriteBatch;
+    
+    private ComponentMapper<BezierPathFollowComponent> pathMapper;
+    private ComponentMapper<Position> positionMapper;
+
+    public PathRenderSystem(SpriteBatch spriteBatch)
+        : base(Aspect.All(typeof(BezierPathFollowComponent), typeof(Position)))
+    {
+        this.spriteBatch = spriteBatch;
+    }
+
+    public override void Initialize(IComponentMapperService mapperService)
+    {
+        this.pathMapper = mapperService.GetMapper<BezierPathFollowComponent>();
+        this.positionMapper = mapperService.GetMapper<Position>();
+    }
+
+    public override void Draw(GameTime gameTime)
+    {
+        foreach (var entity in ActiveEntities)
+        {
+            var path = this.pathMapper.Get(entity);
+            var position = this.positionMapper.Get(entity);
+            
+            var color = Color.White;
+            const int thickness = 1;
+
+            Util.DrawStabilizedBresenhamCubicBezier(
+                spriteBatch, path.P0, path.P1, path.P2, path.P3,
+                color, thickness, minT: path.MinT, maxT: Math.Clamp(path.T, 0, 1)
+            );
+
+            if (path.T > 1.0f)
+            {
+                var start = path.P3;
+                var end = path.P3 + (path.P3 - path.P2).NormalizedCopy() * Constants.BeamMaxTravelDistance;
+                var minT = path.Speed * Math.Max(0, path.MinT - 1) / Constants.BeamMaxTravelDistance;
+                var maxT = (position.Value - path.P3).Length() / Constants.BeamMaxTravelDistance;
+                Util.DrawStabilizedBresenhamLine(spriteBatch, start, end, color, minT, maxT, thickness, 100);
+            }
+            
+            // spriteBatch.DrawCircle(position.Value, 3f, 10, Color.Red, 3f);
+        }
+    }
+
 }

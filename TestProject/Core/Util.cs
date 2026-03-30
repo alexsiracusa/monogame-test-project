@@ -1,7 +1,6 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 
 namespace TestProject.Core;
 
@@ -66,9 +65,11 @@ public static class Util
         int segments = 25, 
         float minT = 0, 
         float maxT = 1f
-        )
+    )
     {
-        var previousPoint = p0;
+        if (minT >= maxT || minT < 0 || maxT > 1) return;
+        
+        var previousPoint = GetCubicBezierPoint(p0, p1, p2, p3, minT);
 
         for (var i = 1; i <= segments; i++)
         {
@@ -80,6 +81,39 @@ public static class Util
             previousPoint = currentPoint;
         }
     }
+
+    public static void DrawStabilizedBresenhamCubicBezier(
+        SpriteBatch spriteBatch, 
+        Vector2 p0, Vector2 p1, 
+        Vector2 p2, Vector2 p3, 
+        Color color,
+        int thickness = 1, 
+        int segments = 25, 
+        float minT = 0, 
+        float maxT = 1f
+    )
+    {
+        DrawStabilizedCurve(spriteBatch, GetPosition, color, thickness, segments, minT, maxT);
+        return;
+        Vector2 GetPosition(float t) => GetCubicBezierPoint(p0, p1, p2, p3, t);
+    }
+    
+    public static void DrawStabilizedBresenhamLine(
+        SpriteBatch spriteBatch,
+        Vector2 start, 
+        Vector2 end,
+        Color color, 
+        float minT = 0, 
+        float maxT = 1f,
+        int thickness = 1,
+        int segments = 50
+    )
+    {
+        DrawStabilizedCurve(spriteBatch, GetPosition, color, thickness, segments, minT, maxT);
+        return;
+        Vector2 GetPosition(float t) => Vector2.Lerp(start, end, t);
+    }
+    
     
     private static Texture2D pixel;
     
@@ -91,6 +125,35 @@ public static class Util
             pixel.SetData(new[] { Color.White });
         }
         return pixel;
+    }
+
+    private static void DrawStabilizedCurve(
+        SpriteBatch spriteBatch,
+        Func<float, Vector2> getPosition,
+        Color color,
+        int thickness = 1,
+        int segments = 50,
+        float minT = 0, 
+        float maxT = 1f
+    )
+    {
+        if (minT >= maxT || minT < 0 || maxT > 1) return;
+        
+        var previousPoint = getPosition(minT);
+
+        for (var i = 1; i <= segments; i++)
+        {
+            var t = i / (float) segments;
+            if (t < minT || t > maxT) continue;
+            var currentPoint = getPosition(t);
+
+            DrawBresenhamLine(spriteBatch, previousPoint, currentPoint, color, thickness);
+
+            previousPoint = currentPoint;
+        }
+        
+        var endPoint = getPosition(maxT);
+        DrawBresenhamLine(spriteBatch, previousPoint, endPoint, color, thickness);
     }
     
     // Bresenham line function (float -> int internally)

@@ -27,7 +27,7 @@ internal class VelocitySystem : EntityUpdateSystem
             var position = this.positionMapper.Get(entity);
             var velocity = this.velocityMapper.Get(entity);
 
-            position.Value += 0.001f * velocity.Value * gameTime.ElapsedGameTime.Milliseconds;
+            position.Value += velocity.Value * (float) gameTime.ElapsedGameTime.TotalSeconds;
         }
     }
 }
