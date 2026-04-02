@@ -26,12 +26,26 @@ public static class Vector2Extensions
         {
             return Vector2.Normalize(v) * min;
         }
+
         return v;
     }
 }
 
 public static class Util
 {
+    private static Texture2D pixel;
+
+    private static Texture2D GetPixel(SpriteBatch spriteBatch)
+    {
+        if (pixel == null)
+        {
+            pixel = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
+            pixel.SetData(new[] { Color.White });
+        }
+
+        return pixel;
+    }
+    
     public static Vector2 GetCubicBezierPoint(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3, float t)
     {
         var u = 1 - t;
@@ -97,35 +111,6 @@ public static class Util
         return;
         Vector2 GetPosition(float t) => GetCubicBezierPoint(p0, p1, p2, p3, t);
     }
-    
-    public static void DrawStabilizedBresenhamLine(
-        SpriteBatch spriteBatch,
-        Vector2 start, 
-        Vector2 end,
-        Color color, 
-        float minT = 0, 
-        float maxT = 1f,
-        int thickness = 1,
-        int segments = 50
-    )
-    {
-        DrawStabilizedCurve(spriteBatch, GetPosition, color, thickness, segments, minT, maxT);
-        return;
-        Vector2 GetPosition(float t) => Vector2.Lerp(start, end, t);
-    }
-    
-    
-    private static Texture2D pixel;
-    
-    private static Texture2D GetPixel(SpriteBatch spriteBatch)
-    {
-        if (pixel == null)
-        {
-            pixel = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
-            pixel.SetData(new[] { Color.White });
-        }
-        return pixel;
-    }
 
     private static void DrawStabilizedCurve(
         SpriteBatch spriteBatch,
@@ -156,7 +141,62 @@ public static class Util
         DrawBresenhamLine(spriteBatch, previousPoint, endPoint, color, thickness);
     }
     
-    // Bresenham line function (float -> int internally)
+    public static void DrawStabilizedBresenhamLine(
+        SpriteBatch spriteBatch,
+        Vector2 start, 
+        Vector2 end,
+        Color color, 
+        int thickness = 1)
+    {
+        var pixel = GetPixel(spriteBatch);
+
+        float x0 = start.X, y0 = start.Y;
+        float x1 = end.X, y1 = end.Y;
+
+        // 1. Determine dominance and "normalize"
+        bool steep = Math.Abs(y1 - y0) > Math.Abs(x1 - x0);
+    
+        if (steep)
+        {
+            // Swap X and Y coordinates
+            (x0, y0) = (y0, x0);
+            (x1, y1) = (y1, x1);
+        }
+
+        // 2. Ensure we always draw from left to right (low to high X)
+        // This makes the pixel pattern deterministic regardless of draw direction
+        if (x0 > x1)
+        {
+            (x0, x1) = (x1, x0);
+            (y0, y1) = (y1, y0);
+        }
+
+        // 3. Drawing Logic Block
+        float dx = x1 - x0;
+        float dy = y1 - y0;
+        float slope = (dx == 0) ? 0 : dy / dx;
+        float intercept = y0 - (slope * x0);
+
+        int iStart = (int) MathF.Round(x0);
+        int iEnd = (int) MathF.Round(x1);
+
+        for (int i = iStart; i <= iEnd; i++)
+        {
+            // Calculate the dependent variable
+            int j = (int) MathF.Floor(slope * i + intercept + 0.5f);
+
+            // 4. "Un-normalize" inside the draw call
+            if (steep)
+            {
+                DrawThickPixel(spriteBatch, pixel, j, i, thickness, color);
+            }
+            else
+            {
+                DrawThickPixel(spriteBatch, pixel, i, j, thickness, color);
+            }
+        }
+    }
+
     public static void DrawBresenhamLine(
         SpriteBatch spriteBatch,
         Vector2 start, 

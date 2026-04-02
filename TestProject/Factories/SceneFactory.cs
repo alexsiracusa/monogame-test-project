@@ -55,14 +55,16 @@ public class SceneFactory
         var world = new WorldBuilder()
             // Mechanics
             .AddSystem(new PlayerKeyboardSystem())
+            
+            // Movement 
             .AddSystem(new MovementSystem())
+            .AddSystem(new PathFollowSystem())
             .AddSystem(new VelocitySystem())
             .AddSystem(new CameraFollowSystem(camera))
             
             // Attack
             .AddSystem(new PlayerMouseSystem(camera))
             .AddSystem(new CastingSystem(entityFactory))
-            .AddSystem(new PathFollowSystem())
             
             // Animations
             .AddSystem(new AnimationStateSystem())

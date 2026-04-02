@@ -100,7 +100,7 @@ public class IntentRenderSystem : EntityDrawSystem
 
             if (castIntent.IsStraight())
             {
-                Util.DrawBresenhamLine(
+                Util.DrawStabilizedBresenhamLine(
                     spriteBatch, castIntent.CastPosition, castIntent.TargetPosition, 
                     color, thickness
                 );
@@ -109,12 +109,13 @@ public class IntentRenderSystem : EntityDrawSystem
             {
                 Util.DrawBresenhamCubicBezier(
                     spriteBatch, castIntent.CastPosition, castIntent.ControlPoint1, 
-                    castIntent.ControlPoint2, castIntent.TargetPosition, color, thickness
+                    castIntent.ControlPoint2, castIntent.TargetPosition, 
+                    color, thickness, segments: 30
                 );
             
                 var launchDirection = castIntent.MousePosition - castIntent.TargetPosition;
                 var endPosition = castIntent.TargetPosition + launchDirection.NormalizedCopy() * Constants.BeamMaxTravelDistance;
-                Util.DrawBresenhamLine(spriteBatch, castIntent.TargetPosition, endPosition, color, thickness);
+                Util.DrawStabilizedBresenhamLine(spriteBatch, castIntent.TargetPosition, endPosition, color, thickness);
             }
             
             
@@ -161,20 +162,21 @@ internal class PathRenderSystem : EntityDrawSystem
             const int thickness = 1;
 
             Util.DrawStabilizedBresenhamCubicBezier(
-                spriteBatch, path.P0, path.P1, path.P2, path.P3,
-                color, thickness, minT: path.MinT, maxT: Math.Clamp(path.T, 0, 1)
+                spriteBatch, path.P0, path.P1, path.P2, path.P3, color, 
+                thickness, segments: 25, minT: path.MinT, maxT: Math.Clamp(path.T, 0, 1)
             );
 
             if (path.T > 1.0f)
             {
-                var start = path.P3;
-                var end = path.P3 + (path.P3 - path.P2).NormalizedCopy() * Constants.BeamMaxTravelDistance;
-                var minT = path.Speed * Math.Max(0, path.MinT - 1) / Constants.BeamMaxTravelDistance;
-                var maxT = (position.Value - path.P3).Length() / Constants.BeamMaxTravelDistance;
-                Util.DrawStabilizedBresenhamLine(spriteBatch, start, end, color, minT, maxT, thickness, 100);
+                var dir = (path.P3 - path.P2).NormalizedCopy();
+                var start = path.P3 + dir * path.Speed * Math.Max(0, path.MinT - 1);
+                var end = position.Value;
+                Util.DrawStabilizedBresenhamLine(spriteBatch, start, end, color, thickness);
             }
             
-            // spriteBatch.DrawCircle(position.Value, 3f, 10, Color.Red, 3f);
+            // Draw target and position for debugging
+            // spriteBatch.DrawCircle(position.Value, 2f, 10, Color.Red, 2f);
+            // spriteBatch.DrawCircle(path.P3, 2f, 10, Color.Red, 2f);
         }
     }
 

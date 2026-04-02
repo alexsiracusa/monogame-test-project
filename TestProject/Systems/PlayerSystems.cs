@@ -7,6 +7,7 @@ using MonoGame.Extended.ECS.Systems;
 using MonoGame.Extended.Input;
 
 using TestProject.Components;
+using TestProject.Core;
 
 namespace TestProject.Systems;
 
@@ -53,7 +54,7 @@ internal class PlayerKeyboardSystem : EntityProcessingSystem
             dir.Normalize();
         }
 
-        movementIntent.Direction = 75 * dir;
+        movementIntent.Direction = Constants.PlayerWalkSpeed * dir;
     }
 }
 

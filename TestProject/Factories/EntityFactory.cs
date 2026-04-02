@@ -33,7 +33,7 @@ public class EntityFactory
         player.Attach(new Velocity(Vector2.Zero));
         player.Attach(new MovementIntent());
         player.Attach(new CastIntent());
-        player.Attach(new CameraTarget());
+        // player.Attach(new CameraTarget());
         
         var sprite = animationFactory.CreatePlayer();
         player.Attach(sprite);
